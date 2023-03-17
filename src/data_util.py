@@ -79,19 +79,19 @@ class Dataset_(Dataset):
         self.trsf_list = []
 
         if self.hdf5_path is None:
-            if crop_long_edge:
-                self.trsf_list += [CenterCropLongEdge()]
+            # if crop_long_edge:
+            #     self.trsf_list += [CenterCropLongEdge()]
             if resize_size is not None and resizer != "wo_resize":
                 self.trsf_list += [transforms.Resize(resize_size, interpolation=resizer_collection[resizer])]
         else:
             self.trsf_list += [transforms.ToPILImage()]
 
-        if self.random_flip:
-            self.trsf_list += [transforms.RandomHorizontalFlip()]
+        # if self.random_flip:
+        #     self.trsf_list += [transforms.RandomHorizontalFlip()]
 
         if self.normalize:
             self.trsf_list += [transforms.ToTensor()]
-            self.trsf_list += [transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])]
+            self.trsf_list += [transforms.Normalize([0.5], [0.5])]
         else:
             self.trsf_list += [transforms.PILToTensor()]
 
@@ -116,9 +116,13 @@ class Dataset_(Dataset):
         elif self.data_name == "CIFAR100":
             self.data = CIFAR100(root=self.data_dir, train=self.train, download=True)
         else:
+            def pil_loader(path: str) -> Image.Image:
+                with open(path, "rb") as f:
+                    return Image.open(f)
+
             mode = "train" if self.train == True else "valid"
             root = os.path.join(self.data_dir, mode)
-            self.data = ImageFolder(root=root)
+            self.data = ImageFolder(root=root, loader=pil_loader)
 
     def _get_hdf5(self, index):
         with h5.File(self.hdf5_path, "r") as f:
