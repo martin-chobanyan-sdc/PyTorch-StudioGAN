@@ -422,7 +422,11 @@ def load_worker(local_rank, cfgs, gpus_per_node, run_name, hdf5_path):
 
                 # save GAN in "./checkpoints/RUN_NAME/*"
                 if global_rank == 0:
-                    worker.save(step=step, is_best=is_best)
+                    if hasattr(train_dataset.data, "class_to_idx"):
+                        class_to_idx = train_dataset.data.class_to_idx
+                    else:
+                        class_to_idx = dict()
+                    worker.save(step=step, is_best=is_best, class_to_idx=class_to_idx)
 
                 # stop processes until all processes arrive
                 if cfgs.RUN.distributed_data_parallel:

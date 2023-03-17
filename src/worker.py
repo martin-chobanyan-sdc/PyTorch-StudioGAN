@@ -937,12 +937,12 @@ class WORKER(object):
     # -----------------------------------------------------------------------------
     # save the trained generator, generator_ema, and discriminator.
     # -----------------------------------------------------------------------------
-    def save(self, step, is_best):
+    def save(self, step, is_best, class_to_idx):
         when = "best" if is_best is True else "current"
         misc.make_GAN_untrainable(self.Gen, self.Gen_ema, self.Dis)
         Gen, Gen_ema, Dis = misc.peel_models(self.Gen, self.Gen_ema, self.Dis)
 
-        g_states = {"state_dict": Gen.state_dict(), "optimizer": self.OPTIMIZATION.g_optimizer.state_dict()}
+        g_states = {"state_dict": Gen.state_dict(), "optimizer": self.OPTIMIZATION.g_optimizer.state_dict(), "class_to_idx": class_to_idx}
 
         d_states = {
             "state_dict": Dis.state_dict(),
@@ -957,6 +957,7 @@ class WORKER(object):
             "best_fid": self.best_fid,
             "best_fid_ckpt": self.RUN.ckpt_dir,
             "lecam_emas": self.lecam_ema.__dict__,
+            "class_to_idx": class_to_idx,
         }
 
         if self.Gen_ema is not None:
