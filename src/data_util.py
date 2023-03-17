@@ -118,7 +118,9 @@ class Dataset_(Dataset):
         else:
             def pil_loader(path: str) -> Image.Image:
                 with open(path, "rb") as f:
-                    return Image.open(f)
+                    img = Image.open(f)
+                    img.load()
+                    return img
 
             mode = "train" if self.train == True else "valid"
             root = os.path.join(self.data_dir, mode)
