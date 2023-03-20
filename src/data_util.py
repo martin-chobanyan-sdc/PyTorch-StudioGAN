@@ -78,6 +78,8 @@ class Dataset_(Dataset):
         self.load_data_in_memory = load_data_in_memory
         self.trsf_list = []
 
+        self.trsf_list.append(transforms.Pad(padding=(0, 180)))
+
         if self.hdf5_path is None:
             # if crop_long_edge:
             #     self.trsf_list += [CenterCropLongEdge()]
