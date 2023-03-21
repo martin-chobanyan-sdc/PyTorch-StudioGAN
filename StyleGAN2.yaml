@@ -1,5 +1,5 @@
 DATA:
-  name: "SphericalToothRasterSample"
+  name: "SphericalToothRaster"
   img_size: 512
   num_classes: 32
   img_channels: 1
@@ -22,7 +22,7 @@ LOSS:
   r1_place: "outside_loop"
 OPTIMIZATION:
   # These values will be slightly changed if lazy regularization is applied.
-  batch_size: 8
+  batch_size: 48
   acml_steps: 1
   g_lr: 0.002
   d_lr: 0.002
@@ -31,7 +31,7 @@ OPTIMIZATION:
   d_first: False
   g_updates_per_step: 1
   d_updates_per_step: 1
-  total_steps: 8000
+  total_steps: 800000
 STYLEGAN:
   g_reg_interval: 4
   d_reg_interval: 16
@@ -43,3 +43,4 @@ STYLEGAN:
   pl_weight: 2
   d_architecture: "resnet"
   d_epilogue_mbstd_group_size: 4
+

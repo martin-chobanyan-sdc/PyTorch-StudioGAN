@@ -54,6 +54,7 @@ class LoadEvalModel(object):
         elif self.eval_backbone in ["InceptionV3_torch", "ResNet50_torch", "SwAV_torch"]:
             self.res = 299 if "InceptionV3" in self.eval_backbone else 224
             mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
+            torch.hub._validate_not_a_forked_repo=lambda a,b,c: True
             self.model = torch.hub.load(model_versions[self.eval_backbone],
                                         model_names[self.eval_backbone],
                                         pretrained=True)
